@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Bengali sports-news → social-media-poster pipeline ("Boishakhi TV" branded). It scrapes football news, AI-scores articles, generates Bangla content + image prompts, then composites 3-format posters (1080×1080 square, 1080×1350 portrait, 1080×566 landscape). End-to-end orchestration lives in `main.py`.
+A Bengali sports-news → social-media-poster pipeline ["Boishakhi TV" branded]. It scrapes football news, AI-scores articles, generates Bangla content + image prompts, then composites 3-format posters (1080×1080 square, 1080×1350 portrait, 1080×566 landscape). End-to-end orchestration lives in `main.py`.
 
 The README.md has the full architecture diagram, env-var reference, and output-file inventory. Read it first.
 
