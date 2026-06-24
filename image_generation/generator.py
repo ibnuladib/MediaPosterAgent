@@ -13,18 +13,22 @@ The IMAGE_BACKEND env var selects which backend to use.
 """
 
 import io
+import os
 import time
 from pathlib import Path
 from PIL import Image
 
-from config.settings import (
-    IMAGE_BACKEND,
-    STABILITY_API_KEY, REPLICATE_API_KEY, GEMINI_API_KEY,
-    REQUEST_TIMEOUT,
-)
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+IMAGE_BACKEND    = os.environ.get("IMAGE_BACKEND",    "mock")
+STABILITY_API_KEY = os.environ.get("STABILITY_API_KEY", "")
+REPLICATE_API_KEY = os.environ.get("REPLICATE_API_KEY", "")
+GEMINI_API_KEY    = os.environ.get("GEMINI_API_KEY",    "")
+REQUEST_TIMEOUT   = int(os.environ.get("REQUEST_TIMEOUT_SECONDS", "15"))
+POSTERS_DIR       = Path(__file__).resolve().parent.parent / "posters"
+POSTERS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Standard output dimensions (width × height)
 SIZES: dict[str, tuple[int, int]] = {
@@ -79,7 +83,6 @@ def generate_image(
 
     # Save
     if output_path is None:
-        from config.settings import POSTERS_DIR
         output_path = POSTERS_DIR / f"image_{int(time.time())}_{size}.png"
 
     output_path = Path(output_path)

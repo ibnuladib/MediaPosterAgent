@@ -8,12 +8,14 @@ Usage:
     python main.py                   # run once and exit
 """
 
+import os
 import schedule
 import time
-from config.settings import SCHEDULE_INTERVAL_MINUTES
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+SCHEDULE_INTERVAL_MINUTES = int(os.environ.get("SCHEDULE_INTERVAL_MINUTES", "60"))
 
 
 def run_with_schedule(pipeline_fn, interval_minutes: int | None = None) -> None:

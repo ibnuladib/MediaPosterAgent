@@ -2,18 +2,22 @@
 scraping/rss_fetcher.py
 -----------------------
 Fetches and normalises articles from all RSS sources.
-Inherits retry / timeout from config.settings.
+Inherits retry / timeout from .env.
 """
 
+import os
 import re
 import time
 import feedparser
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from config.settings import REQUEST_TIMEOUT, MAX_RETRIES, RETRY_DELAY
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+REQUEST_TIMEOUT = int(os.environ.get("REQUEST_TIMEOUT_SECONDS", "15"))
+MAX_RETRIES     = int(os.environ.get("MAX_RETRIES",             "3"))
+RETRY_DELAY     = int(os.environ.get("RETRY_DELAY_SECONDS",     "5"))
 
 
 def _clean_html(text: str) -> str:

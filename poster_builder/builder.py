@@ -17,10 +17,12 @@ import io
 import textwrap
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
-from config.settings import POSTERS_DIR
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+POSTERS_DIR = Path(__file__).resolve().parent.parent / "posters"
+POSTERS_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Color palette ─────────────────────────────────────────────────────────────
 C_BG_DARK    = (8,  20,  50,  230)   # deep navy, semi-transparent

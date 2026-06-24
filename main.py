@@ -19,16 +19,30 @@ Usage:
     python main.py              # run once
     python main.py --schedule   # run on schedule (interval from .env)
     python main.py --skip-images # skip image generation (text pipeline only)
+    python main.py --clean       # wipe generated outputs (fresh-start reset)
 """
 
+import os
 import sys
 import time
 import argparse
 from pathlib import Path
 from datetime import datetime
+from dotenv import load_dotenv
 
-# ── Config & logging ──────────────────────────────────────────────────────────
-from config.settings import MAX_ARTICLES_PER_RUN, MIN_VIRAL_SCORE
+load_dotenv(Path(__file__).resolve().parent / ".env")
+
+# ── Config (env-only) ─────────────────────────────────────────────────────────
+MAX_ARTICLES_PER_RUN = int(os.environ.get("MAX_ARTICLES_PER_RUN", "5"))
+MIN_VIRAL_SCORE      = int(os.environ.get("MIN_VIRAL_SCORE",      "70"))
+_ROOT = Path(__file__).resolve().parent
+POSTERS_DIR = _ROOT / "posters"
+EXPORTS_DIR = _ROOT / "exports"
+NEWS_DIR    = _ROOT / "news"
+LOGS_DIR    = _ROOT / "logs"
+for _d in (POSTERS_DIR, EXPORTS_DIR, NEWS_DIR, LOGS_DIR):
+    _d.mkdir(parents=True, exist_ok=True)
+
 from config.logging_setup import get_logger
 
 log = get_logger("pipeline")
@@ -52,7 +66,7 @@ from ai.poster_pipeline import run_stage1_batch, run_stage2_batch
 from image_generation import generate_image
 from poster_builder import build_all_formats
 from storage import get_seen_urls, save_articles, save_run_metadata
-from exports import export_all
+from exports.exporter import export_all
 
 
 def run_pipeline(skip_images: bool = False) -> dict:
@@ -102,6 +116,23 @@ def run_pipeline(skip_images: bool = False) -> dict:
     seen_urls  = get_seen_urls()
     articles   = deduplicate_articles(raw_articles, seen_urls=seen_urls)
 
+    # ── Step 2.5: 24h freshness filter ────────────────────────────────────────
+    # Drop anything older than 24h based on published_ts.
+    # published_ts == 0.0 (unknown date, e.g. FIFA Inside with unparseable date)
+    # is KEPT — better to risk an old article than to silently drop news.
+    cutoff = time.time() - 24 * 3600
+    fresh, stale = [], []
+    for a in articles:
+        ts = a.get("published_ts", 0.0) or 0.0
+        if ts == 0.0 or ts >= cutoff:
+            fresh.append(a)
+        else:
+            stale.append(a)
+    if stale:
+        log.info("24h freshness filter: kept %d, dropped %d stale",
+                 len(fresh), len(stale))
+    articles = fresh
+
     if not articles:
         log.warning("No new articles found. Pipeline complete (nothing to process).")
         return {"run_id": run_id, "articles_processed": 0}
@@ -111,10 +142,32 @@ def run_pipeline(skip_images: bool = False) -> dict:
     scored = score_articles(articles)
 
     # ── Step 4: Filter ────────────────────────────────────────────────────────
-    log.info("STEP 4/10 – Filtering  (MIN_VIRAL_SCORE=%d)", MIN_VIRAL_SCORE)
+    # TESTING MODE: brand philosophy = "viral / controversial / engaging posters".
+    # Apply two filters in order:
+    #   (a) controversy bias — re-rank so dramatic categories rise to the top
+    #   (b) viral floor      — keep only viral_score >= MIN_VIRAL_SCORE (70)
+    log.info("STEP 4/10 – Filtering  (MIN_VIRAL_SCORE=%d, MAX=%d)",
+             MIN_VIRAL_SCORE, MAX_ARTICLES_PER_RUN)
+
+    # (a) Controversy bias: bump rank_score for dramatic categories
+    _BIAS = {"controversy": 15, "transfer": 8, "result": 5, "injury": 5, "ranking": 3}
+    for a in scored:
+        boost = _BIAS.get(a.get("category", ""), 0)
+        if boost:
+            a["rank_score"] = min(100, a.get("rank_score", 0) + boost)
+    scored.sort(key=lambda a: a.get("rank_score", 0), reverse=True)
+
+    # (b) Viral floor — drop anything that didn't hit the threshold
     top = [a for a in scored if a.get("viral_score", 0) >= MIN_VIRAL_SCORE]
     top = top[:MAX_ARTICLES_PER_RUN]
-    log.info("Articles after filter: %d", len(top))
+    dropped = len(scored) - len(top)
+    log.info("Articles after filter: %d  (dropped %d below viral floor)",
+             len(top), dropped)
+    if top:
+        for i, a in enumerate(top, 1):
+            log.info("  #%d  viral=%-3d rank=%-3d cat=%-12s  %s",
+                     i, a.get("viral_score", 0), a.get("rank_score", 0),
+                     a.get("category", "?"), a["title"][:55])
 
     if not top:
         log.warning("No articles passed the viral score threshold.")
@@ -125,7 +178,9 @@ def run_pipeline(skip_images: bool = False) -> dict:
     # social captions, image generation prompt. Prompt loaded from
     # prompts/stage1_content.md. Output stored in article dict as shared context.
     log.info("STEP 5/10 – Stage 1: Content & Image Orchestration  (%d articles)", len(top))
-    top = run_stage1_batch(top, delay=0.5)
+    # ponytail: 4s delay between Stage 1 calls to stay under Gemini free-tier
+    # rate limits (~15 RPM). Without this, runs of 10+ articles get 429'd.
+    top = run_stage1_batch(top, delay=4.0)
 
     # ── Step 6: (placeholder — image prompt is now part of Stage 1) ──────────
     log.info("STEP 6/10 – Image prompts embedded in Stage 1 output (skipping legacy step)")
@@ -149,7 +204,8 @@ def run_pipeline(skip_images: bool = False) -> dict:
         # Outputs AI-driven CSS typography parameters (font sizes, weights,
         # emphasis colour, badge colour). Prompt from prompts/stage2_typography.md.
         log.info("STEP 7.5/10 – Stage 2: Typography Orchestration  (%d articles)", len(top))
-        top = run_stage2_batch(top, size="square", delay=0.2)
+        # ponytail: 2s delay — Stage 2 is smaller/faster (8b model), but still counts against RPM.
+        top = run_stage2_batch(top, size="square", delay=2.0)
 
         log.info("STEP 8/10 – Poster composition")
         for i, art in enumerate(top, start=1):
@@ -198,6 +254,54 @@ def run_pipeline(skip_images: bool = False) -> dict:
     return summary
 
 
+# ── Clean (fresh-start reset) ─────────────────────────────────────────────────
+
+def clean_outputs(keep_cache: bool = False, keep_logs: bool = False) -> None:
+    """
+    Wipe generated outputs for a fresh-start run.
+
+    By default removes: posters/, exports/, news/article_cache.json, news/last_run.json.
+    Add --keep-cache to preserve article_cache.json (dedup history).
+    Add --keep-logs to preserve logs/pipeline.log.
+    """
+    targets = []
+    if POSTERS_DIR.exists():
+        for f in POSTERS_DIR.glob("*"):
+            if f.is_file():
+                targets.append(f)
+    if EXPORTS_DIR.exists():
+        for f in EXPORTS_DIR.glob("*"):
+            if f.is_file():
+                targets.append(f)
+    if NEWS_DIR.exists():
+        if not keep_cache:
+            for name in ("article_cache.json", "last_run.json"):
+                f = NEWS_DIR / name
+                if f.exists():
+                    targets.append(f)
+    if LOGS_DIR.exists() and not keep_logs:
+        # Close any open file handlers on our loggers first — Windows
+        # refuses to delete a file still held by a process.
+        import logging
+        for lg in logging.root.manager.loggerDict.values():
+            if isinstance(lg, logging.Logger):
+                for h in list(lg.handlers):
+                    if isinstance(h, logging.handlers.RotatingFileHandler):
+                        try:
+                            h.close()
+                            lg.removeHandler(h)
+                        except Exception:
+                            pass
+        for f in LOGS_DIR.glob("*.log*"):
+            targets.append(f)
+
+    for f in targets:
+        f.unlink()
+        log.info("removed %s", f)
+
+    log.info("Cleaned %d file(s).", len(targets))
+
+
 # ── CLI entry point ───────────────────────────────────────────────────────────
 
 def main():
@@ -212,7 +316,23 @@ def main():
         "--skip-images", action="store_true",
         help="Skip image generation and poster building (text pipeline only)"
     )
+    parser.add_argument(
+        "--clean", action="store_true",
+        help="Wipe generated outputs and exit (fresh-start reset)"
+    )
+    parser.add_argument(
+        "--keep-cache", action="store_true",
+        help="Used with --clean: keep news/article_cache.json (dedup history)"
+    )
+    parser.add_argument(
+        "--keep-logs", action="store_true",
+        help="Used with --clean: keep logs/pipeline.log"
+    )
     args = parser.parse_args()
+
+    if args.clean:
+        clean_outputs(keep_cache=args.keep_cache, keep_logs=args.keep_logs)
+        return
 
     # ── Pre-flight checks ─────────────────────────────────────────────────────
     log.info("Checking AI connection …")

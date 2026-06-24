@@ -13,6 +13,7 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+*.egg-info/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -23,3 +24,26 @@ build/
 
 # Virtualenv added by project (ignore committed virtualenv)
 agent-env/
+
+# ── Pipeline runtime artifacts (regenerated each run) ──────────────────────────
+# Cache: seen-URL dedup + last-run metadata
+news/article_cache.json
+news/last_run.json
+
+# Generated posters (238MB after a few runs)
+posters/*.png
+!posters/.gitkeep
+
+# Generated exports (JSON / CSV / HTML report / manifest)
+exports/*.json
+exports/*.csv
+exports/*.html
+!exports/.gitkeep
+
+# Rotating log files
+logs/*.log
+logs/*.log.*
+!logs/.gitkeep
+
+# Notebook output (regenerate with `python generate_notebook.py`)
+news_agent.ipynb

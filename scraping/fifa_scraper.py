@@ -17,17 +17,61 @@ Sections scraped:
   • FIFA Talent Development – talent-development
 """
 
+import os
 import re
 import json
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 
 import requests
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from config.settings import MAX_RETRIES, RETRY_DELAY
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+MAX_RETRIES = int(os.environ.get("MAX_RETRIES",         "3"))
+RETRY_DELAY = int(os.environ.get("RETRY_DELAY_SECONDS", "5"))
+
+
+def _parse_flexible_date(s: str) -> float:
+    """
+    Parse FIFA Inside articleDate strings into a Unix epoch float.
+    Returns 0.0 on any failure (caller treats that as "unknown age" → drop).
+    Handles: ISO 8601 ("2026-06-23T..."), RFC 2822 ("Fri, 23 Jun 2026 ..."),
+    and the "23 Jun 2026" short form FIFA's UI uses.
+    """
+    if not s:
+        return 0.0
+    s = s.strip()
+    # ISO 8601 with Z or offset
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
+    except (ValueError, TypeError):
+        pass
+    # RFC 2822 / asctime
+    try:
+        dt = parsedate_to_datetime(s)
+        if dt is not None:
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt.timestamp()
+    except (ValueError, TypeError):
+        pass
+    # "23 Jun 2026" / "23 June 2026" short form
+    m = re.search(r"(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})", s)
+    if m:
+        try:
+            dt = datetime.strptime(m.group(0), "%d %b %Y").replace(tzinfo=timezone.utc)
+            return dt.timestamp()
+        except ValueError:
+            try:
+                dt = datetime.strptime(m.group(0), "%d %B %Y").replace(tzinfo=timezone.utc)
+                return dt.timestamp()
+            except ValueError:
+                pass
+    return 0.0
 
 _HEADERS = {"User-Agent": "FIFA2027Bot/1.0"}
 _INSIDE_BASE = "https://www.inside.fifa.com"
@@ -149,6 +193,10 @@ def scrape_fifa_inside(
                         full_text = fetched
                     time.sleep(0.25)
 
+                # articleDate format varies ("23 Jun 2026", ISO 8601, etc.) — parse
+                # as flexibly as possible; 0.0 means "unknown / unparsed" and will
+                # be excluded by the 24h freshness filter downstream.
+                pub_ts = _parse_flexible_date(card.get("articleDate", ""))
                 all_articles.append({
                     "title":        (card.get("articleTitle") or "No title").strip(),
                     "summary":      summary,
@@ -156,7 +204,7 @@ def scrape_fifa_inside(
                     "link":         link,
                     "source":       f"FIFA Inside – {source_name.replace('FIFA ', '')}",
                     "published":    card.get("articleDate", ""),
-                    "published_ts": 0.0,   # date strings only; scorer sorts by rank
+                    "published_ts": pub_ts,
                     "image_url":    (card.get("image") or {}).get("src", ""),
                     "tag":          card.get("articleTag", ""),
                     "priority":     True,

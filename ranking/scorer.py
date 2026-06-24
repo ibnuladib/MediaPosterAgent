@@ -3,7 +3,7 @@ ranking/scorer.py
 -----------------
 Scores every article on four dimensions:
 
-  • relevance_score  (0-100) – how relevant to FIFA 2027
+  • relevance_score  (0-100) – how relevant to football
   • viral_score      (0-100) – social engagement potential
   • breaking_score   (0-100) – freshness / breaking-news indicator
   • engagement_score (0-100) – combined social metric
@@ -11,8 +11,13 @@ Scores every article on four dimensions:
 Articles are also tagged with category and extracted entities.
 Processing is batched (BATCH_SIZE articles per AI call) to stay within
 token limits and minimise API costs.
+
+TESTING MODE: brand philosophy is "viral / controversial / engaging posters".
+- Off-topic (non-football) articles are dropped BEFORE scoring (pre-filter).
+- Scoring weights rebalanced to favour viral/controversial hooks.
 """
 
+import os
 import re
 import json
 import time
@@ -21,10 +26,15 @@ from ai.client import ask_ai
 
 log = get_logger(__name__)
 
-BATCH_SIZE = 8    # keeps each request well under Groq's 6000 TPM limit
+BATCH_SIZE = int(os.environ.get("SCORING_BATCH_SIZE", "8"))  # articles per scoring call
 
-# Priority weights for the overall rank score
-_W = dict(viral=0.35, relevance=0.30, breaking=0.20, engagement=0.15)
+# Gap between scoring batches. Gemini free tier is 20 req/min ≈ 1 every 3s,
+# but we pad to absorb bursts from any retries. Override via SCORING_BATCH_DELAY.
+_BATCH_DELAY = int(os.environ.get("SCORING_BATCH_DELAY", "12"))
+
+# TESTING MODE: weight viral & breaking higher than relevance/engagement.
+# Brand philosophy: "the most important viral controversial engaging posts".
+_W = dict(viral=0.50, relevance=0.15, breaking=0.25, engagement=0.10)
 
 _SYSTEM = (
     "You are a world-class sports social-media strategist. "
@@ -33,10 +43,46 @@ _SYSTEM = (
 
 # Use a high-quota model for scoring (500k tokens/day free tier)
 # Content generation still uses the bigger model from .env
-_SCORING_MODEL = "llama-3.1-8b-instant"
+_SCORING_MODEL = os.environ.get("SCORING_MODEL", "llama-3.1-8b-instant")
 
-# Max articles fed into the scorer — prevents burning daily quota on huge feeds
-_MAX_SCORE = 80
+# Max articles fed into the scorer — prevents burning daily quota on huge feeds.
+# Override via env: SCORING_MAX_ARTICLES=16  (use a small number while testing).
+_MAX_SCORE = int(os.environ.get("SCORING_MAX_ARTICLES", "80"))
+
+# TESTING MODE: cheap pre-filter for non-football content. Runs BEFORE the
+# expensive AI scoring call so we don't burn tokens on cricket / F1 / tennis
+# bleed-through from RSS mirrors. Anything matching these words is kept
+# (football), anything not matching is dropped.
+_FOOTBALL_KEYWORDS = {
+    "football", "soccer", "fifa", "world cup", "premier league", "champions league",
+    "la liga", "serie a", "bundesliga", "ligue 1", "mls", "europa", "fifa world cup 2026",
+    "goal", "penalty", "referee", "var", "offside", "hat-trick", "hat trick",
+    "striker", "midfielder", "goalkeeper", "defender", "winger",
+    "fc ", " united", " city", " real ", "barcelona", "madrid", "liverpool",
+    "arsenal", "chelsea", "tottenham", "juventus", "milan", "inter", "psg",
+    "bayern", "dortmund", "atletico", "ajax", "porto", "benfica",
+    "messi", "ronaldo", "mbappe", "mbappé", "neymar", "haaland", "kane",
+    "saka", "bellingham", "vinicius", "guardiola", "klopp", "mourinho",
+    "ancelotti", "ten hag", "arteta", "simeone", "salah", "modric",
+}
+
+# Words that scream "not football" — instant drop. Be conservative; default is to KEEP.
+_NON_FOOTBALL_KEYWORDS = {
+    "cricket", "wicket", "ipl", "bcci", "test match", "odi", "t20",
+    "formula 1", "formula one", "f1", "grand prix", "qualifying", "pole position",
+    "verstappen", "hamilton", "norris", "leclerc",
+    "tennis", "wimbledon", "roland garros", "us open", "french open", "australian open",
+    "atp", "wta", "djokovic", "alcaraz", "sinner",
+    "nba", "nfl", "nhl", "mlb", "rugby", "golf", "boxing", "ufc", "mma", "women"
+}
+
+
+def _is_football_article(art: dict) -> bool:
+    """Cheap keyword pre-filter: keep football, drop obvious non-football."""
+    text = f"{art.get('title', '')} {art.get('summary', '')}".lower()
+    if any(kw in text for kw in _NON_FOOTBALL_KEYWORDS):
+        return False
+    return any(kw in text for kw in _FOOTBALL_KEYWORDS)
 
 
 def _build_scoring_prompt(batch: list[dict]) -> str:
@@ -47,7 +93,7 @@ def _build_scoring_prompt(batch: list[dict]) -> str:
             line += f"\n   {art['summary'][:150]}"
         lines.append(line)
 
-    return f"""You are scoring football news articles for a FIFA 2027 social-media pipeline.
+    return f"""You are scoring FOOTBALL news articles for a viral-first social-media pipeline.
 
 Articles from "FIFA Inside" sources (source label starts with "FIFA Inside") are
 official FIFA content covering rankings, analytics, women's football, transfers and
@@ -56,8 +102,8 @@ governance. Treat them as authoritative and score their relevance_score at least
 
 For EACH article return a JSON object with EXACTLY these fields:
   "index"          : article number (integer, 1-based)
-  "relevance_score": 0-100  (how relevant to FIFA 2027 / World Cup; +10 for FIFA Inside)
-  "viral_score"    : 0-100  (social-media viral potential)
+  "relevance_score": 0-100  (how relevant to football / FIFA; +10 for FIFA Inside)
+  "viral_score"    : 0-100  (social-media viral potential — blockbuster transfer, shocking result, controversy, ranking shake-up)
   "breaking_score" : 0-100  (how breaking / time-sensitive)
   "engagement_score": 0-100 (comment / share / reaction potential)
   "why"            : one sentence explaining the top viral hook
@@ -65,8 +111,8 @@ For EACH article return a JSON object with EXACTLY these fields:
                               squad | controversy | logistics | stadium | analytics | other
   "entities"       : object with keys teams[], players[], countries[], stage
 
-Scoring guide (viral_score):
-  80-100 : blockbuster transfer, shocking result, major controversy, ranking shake-up
+Scoring guide (viral_score) — BE AGGRESSIVE, this is for posters:
+  80-100 : blockbuster transfer, shocking result, major controversy, ranking shake-up, viral player moment
   50-79  : notable match, star player injury, squad announcement, ranking update
   20-49  : routine report, minor update, press-conference filler
   0-19   : off-topic or not football-related
@@ -124,6 +170,9 @@ def score_articles(articles: list[dict]) -> list[dict]:
     """
     Score all articles in batches and return them sorted by rank_score desc.
 
+    TESTING MODE: pre-filters obvious non-football content before scoring,
+    so we don't waste tokens on cricket / F1 / tennis bleed-through.
+
     Parameters
     ----------
     articles : list of article dicts from the scraping layer
@@ -132,6 +181,18 @@ def score_articles(articles: list[dict]) -> list[dict]:
     -------
     list – same articles enriched with score fields, sorted best-first
     """
+    # ── Pre-filter: keep football, drop everything else ────────────────────
+    pre = [a for a in articles if _is_football_article(a)]
+    dropped = len(articles) - len(pre)
+    if dropped:
+        log.info("Football pre-filter: kept %d / dropped %d non-football",
+                 len(pre), dropped)
+    articles = pre
+
+    if not articles:
+        log.warning("No football articles after pre-filter.")
+        return []
+
     # Priority (FIFA Inside) articles are always scored; non-priority capped newest-first
     priority   = [a for a in articles if a.get("priority")]
     non_priority = sorted(
@@ -161,7 +222,7 @@ def score_articles(articles: list[dict]) -> list[dict]:
         all_scored.extend(scored)
 
         if b < n_batches - 1:
-            time.sleep(12)  # stay under 6000 TPM — ~500 tokens/batch needs 12s gap
+            time.sleep(_BATCH_DELAY)
 
     all_scored.sort(key=lambda a: a.get("rank_score", 0), reverse=True)
 

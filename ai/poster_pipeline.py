@@ -1,23 +1,28 @@
 """
 ai/poster_pipeline.py
 ----------------------
-Two-stage Groq pipeline that chains context between calls.
+Two-stage pipeline that chains context between calls.
 
-Stage 1 (llama-3.3-70b):
+Stage 1:
   Input  : raw article dict
   Prompt : loaded from prompts/stage1_content.md
   Output : Bangla content, social media captions, image brief, emphasis fragment
   → Writes keys into article dict
 
-Stage 2 (llama-3.1-8b-instant):
+Stage 2:
   Input  : full Stage 1 output (passed as context)
   Prompt : loaded from prompts/stage2_typography.md
   Output : CSS-ready typography spec
   → Writes "typography_spec" key into article dict
 
 The article dict is the shared context object that flows through both stages.
+
+# ponytail: model param dropped from ask_ai() — AI_MODEL in .env (gemini-2.5-flash)
+# is the single source of truth for all stages. Pass model="..." to override per-call
+# if you bring Groq back later.
 """
 
+import os
 import re
 import json
 import time
@@ -79,6 +84,11 @@ _DEFAULT_TYPO = {
 }
 
 
+# Inter-call delays (seconds) — tune via STAGE1_DELAY / STAGE2_DELAY in .env
+_STAGE1_DELAY = float(os.environ.get("STAGE1_DELAY", "4"))
+_STAGE2_DELAY = float(os.environ.get("STAGE2_DELAY", "2"))
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _strip_fences(text: str) -> str:
@@ -89,6 +99,7 @@ def _parse_json(raw: str, stage: str) -> dict:
     """
     Robustly extract the first complete JSON object from an LLM response.
     Handles markdown fences, leading prose, and trailing commentary.
+    String-aware: skips `{` / `}` that appear inside JSON string literals.
     """
     clean = _strip_fences(raw)
 
@@ -98,21 +109,38 @@ def _parse_json(raw: str, stage: str) -> dict:
     except json.JSONDecodeError:
         pass
 
-    # Fallback: extract the outermost {...} block
-    # Scan for the first '{' and match its closing '}'
+    # String-aware brace scan: find first '{', track depth, but skip
+    # everything between matching unescaped double quotes.
     start = clean.find("{")
     if start != -1:
         depth = 0
-        for i, ch in enumerate(clean[start:], start):
-            if ch == "{":
+        in_str = False
+        escape = False
+        end = -1
+        for i in range(start, len(clean)):
+            ch = clean[i]
+            if in_str:
+                if escape:
+                    escape = False
+                elif ch == "\\":
+                    escape = True
+                elif ch == '"':
+                    in_str = False
+                continue
+            if ch == '"':
+                in_str = True
+            elif ch == "{":
                 depth += 1
             elif ch == "}":
                 depth -= 1
                 if depth == 0:
-                    try:
-                        return json.loads(clean[start: i + 1])
-                    except json.JSONDecodeError:
-                        break
+                    end = i
+                    break
+        if end != -1:
+            try:
+                return json.loads(clean[start: end + 1])
+            except json.JSONDecodeError:
+                pass
 
     raise ValueError(f"Stage {stage} returned non-JSON. Preview: {raw[:300]}")
 
@@ -244,8 +272,9 @@ def run_stage2(article: dict, size: str = "square") -> dict:
 
 # ── Batch wrappers ────────────────────────────────────────────────────────────
 
-def run_stage1_batch(articles: list[dict], delay: float = 0.4) -> list[dict]:
+def run_stage1_batch(articles: list[dict], delay: float | None = None) -> list[dict]:
     """Run Stage 1 on all articles sequentially."""
+    delay = _STAGE1_DELAY if delay is None else delay
     for i, art in enumerate(articles, start=1):
         log.info("Stage 1  %d/%d: %s", i, len(articles), art["title"][:55])
         run_stage1(art)
@@ -255,8 +284,9 @@ def run_stage1_batch(articles: list[dict], delay: float = 0.4) -> list[dict]:
 
 
 def run_stage2_batch(articles: list[dict], size: str = "square",
-                     delay: float = 0.2) -> list[dict]:
+                     delay: float | None = None) -> list[dict]:
     """Run Stage 2 on all articles (uses Stage 1 context already in article dicts)."""
+    delay = _STAGE2_DELAY if delay is None else delay
     for i, art in enumerate(articles, start=1):
         log.info("Stage 2  %d/%d: %s", i, len(articles), art["title"][:55])
         run_stage2(art, size=size)

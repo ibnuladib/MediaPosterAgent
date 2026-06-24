@@ -25,17 +25,108 @@ from pathlib import Path
 import requests
 from html2image import Html2Image
 
-from config.settings import POSTERS_DIR
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
 
-_CHROME = "/usr/bin/google-chrome"
+POSTERS_DIR = Path(__file__).resolve().parent.parent / "posters"
+POSTERS_DIR.mkdir(parents=True, exist_ok=True)
+
 _ASSETS = Path(__file__).resolve().parent.parent / "assets"
 
-# Font paths — Noto Sans Bengali is installed on the system
-_FONT_BOLD = "/usr/share/fonts/truetype/noto/NotoSansBengali-Bold.ttf"
-_FONT_REG  = "/usr/share/fonts/truetype/noto/NotoSansBengali-Regular.ttf"
+
+# ── Cross-platform Chrome + Bengali font resolution ────────────────────────────
+# ponytail: one resolver per dependency. Override via env if your install lives
+# somewhere weird (portable Chrome, custom font dir). Detection order:
+#   1. env var (CHROME_EXECUTABLE / BENGALI_FONT_BOLD / BENGALI_FONT_REGULAR)
+#   2. well-known install path for the current OS
+#   3. None — caller logs a warning and proceeds (HTML falls back to system font)
+
+import os
+import platform
+
+def _find_chrome() -> str | None:
+    """Locate a headless-capable Chrome/Chromium binary."""
+    env = os.environ.get("CHROME_EXECUTABLE")
+    if env and Path(env).exists():
+        return env
+
+    system = platform.system()
+    candidates: list[Path] = []
+    if system == "Windows":
+        candidates += [
+            Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+            Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+            Path(os.environ.get("LOCALAPPDATA", "")) / r"Google\Chrome\Application\chrome.exe",
+        ]
+    else:  # Linux / macOS
+        candidates += [
+            Path("/usr/bin/google-chrome"),
+            Path("/usr/bin/google-chrome-stable"),
+            Path("/usr/bin/chromium"),
+            Path("/usr/bin/chromium-browser"),
+            Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        ]
+    for c in candidates:
+        if c and c.exists():
+            return str(c)
+    return None
+
+
+def _find_bengali_font(weight: str) -> str | None:
+    """
+    Locate a Bangla-capable TTF. `weight` is 'bold' or 'regular'.
+    On Windows we use Nirmala (ships with the OS). On Linux we look for
+    Noto Sans Bengali. Returns the first path that exists, else None.
+    """
+    env_key = "BENGALI_FONT_BOLD" if weight == "bold" else "BENGALI_FONT_REGULAR"
+    env = os.environ.get(env_key)
+    if env and Path(env).exists():
+        return env
+
+    system = platform.system()
+    if system == "Windows":
+        # Nirmala = Microsoft's Bangla/Indic font, ships with Windows.
+        # 'B' suffix is Bold; no suffix is Regular. Also try 'S' (Semilight).
+        win_fonts = Path(os.environ.get("WINDIR", r"C:\Windows")) / "Fonts"
+        if weight == "bold":
+            return str(win_fonts / "NirmalaB.ttf") if (win_fonts / "NirmalaB.ttf").exists() else None
+        # regular: prefer Nirmala.ttf, else NirmalaS.ttf
+        for name in ("Nirmala.ttf", "NirmalaS.ttf"):
+            p = win_fonts / name
+            if p.exists():
+                return str(p)
+        return None
+
+    # Linux / macOS — Noto Sans Bengali
+    noto_dir = Path("/usr/share/fonts/truetype/noto")
+    candidates = [
+        noto_dir / ("NotoSansBengali-Bold.ttf"     if weight == "bold" else "NotoSansBengali-Regular.ttf"),
+        noto_dir / ("NotoSansBengali-Bold.ttf"     if weight == "bold" else "NotoSansBengali.ttf"),
+    ]
+    for c in candidates:
+        if c.exists():
+            return str(c)
+    return None
+
+
+_CHROME = _find_chrome()
+_FONT_BOLD = _find_bengali_font("bold")
+_FONT_REG  = _find_bengali_font("regular")
+
+if not _CHROME:
+    log.warning("Chrome/Chromium not found. Set CHROME_EXECUTABLE env var or install Chrome. Posters will fail.")
+else:
+    log.info("Using Chrome: %s", _CHROME)
+if not (_FONT_BOLD and _FONT_REG):
+    log.warning("Bengali font not found (bold=%s, reg=%s). Bangla text may render as boxes. "
+                "Set BENGALI_FONT_BOLD / BENGALI_FONT_REGULAR env vars.", _FONT_BOLD, _FONT_REG)
+
+# CSS font-family used in the rendered HTML. We declare this name and back it
+# with an @font-face for whichever TTF we found. Even when @font-face fails,
+# this exact name is also a system-installed Bengali font on Windows
+# (Nirmala), so the body stack still renders Bangla correctly.
+_FONT_FAMILY = "NotoSansBengali"
 
 _SIZES = {
     "square":    (1080, 1080),
@@ -204,7 +295,7 @@ def _build_html(article: dict, bg_uri: str, template_uri: str,
   body {{
     width:{w}px; height:{h}px;
     overflow:hidden; background:#0a0e14;
-    font-family:'NotoSansBengali','Noto Sans Bengali',sans-serif;
+    font-family:'{_FONT_FAMILY}','Noto Sans Bengali','Nirmala','Vrinda','Mangal',sans-serif;
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
   }}

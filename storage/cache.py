@@ -10,8 +10,10 @@ Uses a single JSON file: news/article_cache.json
 import json
 from pathlib import Path
 from datetime import datetime, timedelta
-from config.settings import NEWS_DIR
 from config.logging_setup import get_logger
+
+NEWS_DIR = Path(__file__).resolve().parent.parent / "news"
+NEWS_DIR.mkdir(parents=True, exist_ok=True)
 
 log = get_logger(__name__)
 

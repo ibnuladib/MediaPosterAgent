@@ -8,7 +8,9 @@ Call get_logger(__name__) in every module.
 import logging
 import logging.handlers
 from pathlib import Path
-from config.settings import LOGS_DIR
+
+LOGS_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def get_logger(name: str) -> logging.Logger:

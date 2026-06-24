@@ -5,14 +5,18 @@ Fallback HTML scraper for sources that don't provide a reliable RSS feed.
 Uses requests + BeautifulSoup to extract headline links from known page layouts.
 """
 
+import os
 import requests
 from bs4 import BeautifulSoup
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from config.settings import REQUEST_TIMEOUT, MAX_RETRIES, RETRY_DELAY
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+REQUEST_TIMEOUT = int(os.environ.get("REQUEST_TIMEOUT_SECONDS", "15"))
+MAX_RETRIES     = int(os.environ.get("MAX_RETRIES",             "3"))
+RETRY_DELAY     = int(os.environ.get("RETRY_DELAY_SECONDS",     "5"))
 
 _HEADERS = {
     "User-Agent": (

@@ -8,18 +8,21 @@ Provider-agnostic AI client.  Exposes one public function:
 Internally routes to Groq / Claude / Gemini based on AI_PROVIDER in .env.
 The rest of the codebase NEVER imports a specific SDK — it only calls ask_ai().
 """
-
+import os
+import traceback
 import re as _re
 import time
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from config.settings import (
-    AI_PROVIDER, AI_API_KEY, AI_MODEL,
-    MAX_RETRIES, RETRY_DELAY,
-)
 from config.logging_setup import get_logger
 
 log = get_logger(__name__)
+
+AI_PROVIDER = os.environ.get("AI_PROVIDER", "groq").lower()
+AI_API_KEY  = os.environ.get("AI_API_KEY",  "")
+AI_MODEL    = os.environ.get("AI_MODEL",    "llama-3.3-70b-versatile")
+MAX_RETRIES = int(os.environ.get("MAX_RETRIES",         "3"))
+RETRY_DELAY = int(os.environ.get("RETRY_DELAY_SECONDS", "5"))
 
 # ── Public entry-point ────────────────────────────────────────────────────────
 
@@ -120,13 +123,16 @@ def _ask_gemini(prompt: str, system: str | None, max_tokens: int) -> str:
 
 # ── Sanity check ──────────────────────────────────────────────────────────────
 
-def test_connection() -> bool:
-    """Return True if the API key is valid and the model responds."""
+
+
+def test_connection():
     try:
-        reply = ask_ai("Reply with exactly: OK", model="llama-3.1-8b-instant")
-        log.info("AI connection OK  provider=%s  model=%s  reply=%r",
-                 AI_PROVIDER, AI_MODEL, reply.strip())
+        reply = ask_ai("Reply with exactly: OK", model=AI_MODEL)
+        print(reply)
         return True
-    except Exception as exc:
-        log.error("AI connection FAILED: %s", exc)
+
+    except Exception as e:
+        print(type(e))
+        print(e)
+        traceback.print_exc()
         return False
