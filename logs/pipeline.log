@@ -1437,3 +1437,424 @@
 2026-06-24 11:38:04  INFO      pipeline    manifest    C:\Users\adib\Desktop\MediaPosterAgent\exports\manifest_20260624_113804.json
 2026-06-24 11:38:04  INFO      pipeline    report      C:\Users\adib\Desktop\MediaPosterAgent\exports\report_20260624_113804.html
 2026-06-24 11:38:04  INFO      pipeline  =================================================================
+2026-06-24 22:21:17  INFO      poster_builder.html_builder  Using Chrome: C:\Program Files\Google\Chrome\Application\chrome.exe
+2026-06-24 22:21:18  INFO      pipeline  Checking AI connection …
+2026-06-24 22:21:22  INFO      pipeline  =================================================================
+2026-06-24 22:21:22  INFO      pipeline  FIFA 2027 Pipeline  RUN ID: 20260624_162122
+2026-06-24 22:21:22  INFO      pipeline  =================================================================
+2026-06-24 22:21:22  INFO      pipeline  STEP 1a/10 – Scraping inside.fifa.com (priority source, 6 sections)
+2026-06-24 22:21:22  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Rankings               https://inside.fifa.com/en/fifa-rankings
+2026-06-24 22:21:23  INFO      scraping.fifa_scraper    → 15 articles
+2026-06-24 22:21:23  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Inside Home            https://inside.fifa.com/en/
+2026-06-24 22:21:27  INFO      scraping.fifa_scraper    → 13 articles
+2026-06-24 22:21:27  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Women's Football       https://inside.fifa.com/womens-football
+2026-06-24 22:21:37  INFO      scraping.fifa_scraper    → 18 articles
+2026-06-24 22:21:37  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Advancing Football     https://inside.fifa.com/advancing-football
+2026-06-24 22:21:47  INFO      scraping.fifa_scraper    → 13 articles
+2026-06-24 22:21:48  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Transfer System        https://inside.fifa.com/transfer-system
+2026-06-24 22:21:54  INFO      scraping.fifa_scraper    → 14 articles
+2026-06-24 22:21:54  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Talent Development     https://inside.fifa.com/talent-development
+2026-06-24 22:21:57  INFO      scraping.fifa_scraper    → 11 articles
+2026-06-24 22:21:57  INFO      scraping.fifa_scraper  FIFA Inside total: 84 unique articles from 6 sources
+2026-06-24 22:21:57  INFO      pipeline    FIFA Inside: 84 articles
+2026-06-24 22:21:57  INFO      pipeline  STEP 1b/10 – Scraping RSS feeds + Google Trends
+2026-06-24 22:21:57  INFO      pipeline    Fetching trending sports topics from Google …
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → fifa world cup 2026 portugal
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → fifa world cup 2026 live
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → fifa world cup 2026 today match
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → where to watch portugal national football team vs uzbekistan national football team
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → portugal national football team vs uzbekistan national football team stats
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → portugal national football team vs uzbekistan national football team
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → portugal national football team vs uzbekistan national football team lineups
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher    Trending → classement équipe du portugal de football – équipe d'ouzbékistan de football
+2026-06-24 22:22:15  INFO      scraping.trends_fetcher  Trends: 8 dynamic feeds added
+2026-06-24 22:22:15  INFO      pipeline    Total RSS sources: 12 (3 static + 9 Google)
+2026-06-24 22:22:15  INFO      scraping.rss_fetcher  Fetching  BBC Sport Football    https://feeds.bbci.co.uk/sport/football/rss.xml
+2026-06-24 22:22:16  INFO      scraping.rss_fetcher    → 88 articles
+2026-06-24 22:22:16  INFO      scraping.rss_fetcher  Fetching  Sky Sports Football   https://www.skysports.com/rss/11095
+2026-06-24 22:22:17  INFO      scraping.rss_fetcher    → 20 articles
+2026-06-24 22:22:17  INFO      scraping.rss_fetcher  Fetching  ESPN Soccer           https://www.espn.com/espn/rss/soccer/news
+2026-06-24 22:22:18  INFO      scraping.rss_fetcher    → 30 articles
+2026-06-24 22:22:18  INFO      scraping.rss_fetcher  Fetching  Google News FIFA 2026  https://news.google.com/rss/search?q=FIFA+World+Cup+2026&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:20  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:22:20  INFO      scraping.rss_fetcher  Fetching  Google News Football  https://news.google.com/rss/search?q=football+goal+match&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:21  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:22:21  INFO      scraping.rss_fetcher  Fetching  Google News Soccer Today  https://news.google.com/rss/search?q=soccer+match+result+today&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:22  INFO      scraping.rss_fetcher    → 58 articles
+2026-06-24 22:22:23  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup 2026 portugal  https://news.google.com/rss/search?q=fifa+world+cup+2026+portugal&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:24  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:22:24  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup 2026 live  https://news.google.com/rss/search?q=fifa+world+cup+2026+live&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:25  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:22:26  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup 2026 today match  https://news.google.com/rss/search?q=fifa+world+cup+2026+today+match&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:27  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:22:27  INFO      scraping.rss_fetcher  Fetching  Google Trends: where to watch portugal national football tea  https://news.google.com/rss/search?q=where+to+watch+portugal+national+football+team+vs+uzbekistan+national+football+team&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:29  INFO      scraping.rss_fetcher    → 91 articles
+2026-06-24 22:22:29  INFO      scraping.rss_fetcher  Fetching  Google Trends: portugal national football team vs uzbekistan  https://news.google.com/rss/search?q=portugal+national+football+team+vs+uzbekistan+national+football+team+lineups&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:31  INFO      scraping.rss_fetcher    → 89 articles
+2026-06-24 22:22:31  INFO      scraping.rss_fetcher  Fetching  Google Trends: classement équipe du portugal de football – é  https://news.google.com/rss/search?q=classement+%C3%A9quipe+du+portugal+de+football+%E2%80%93+%C3%A9quipe+d%27ouzb%C3%A9kistan+de+football&hl=en&gl=US&ceid=US:en
+2026-06-24 22:22:32  INFO      scraping.rss_fetcher    → 53 articles
+2026-06-24 22:22:32  INFO      scraping.rss_fetcher  Total fetched: 929 articles from 12 sources
+2026-06-24 22:22:32  INFO      pipeline  STEP 1c/10 – HTML scraping fallback
+2026-06-24 22:22:32  INFO      pipeline  Total raw articles: 1013  (84 FIFA Inside + 929 RSS + 0 HTML)
+2026-06-24 22:22:32  INFO      pipeline  STEP 2/10 – Deduplication
+2026-06-24 22:22:33  INFO      scraping.deduplicator  Dedup: 1013 → 725 articles (288 duplicates removed)
+2026-06-24 22:22:33  INFO      pipeline  24h freshness filter: kept 243, dropped 482 stale
+2026-06-24 22:22:33  INFO      pipeline  STEP 3/10 – AI scoring  (243 articles)
+2026-06-24 22:22:33  INFO      ranking.scorer  Football pre-filter: kept 215 / dropped 28 non-football
+2026-06-24 22:22:33  INFO      ranking.scorer  Scoring cap: 6 priority + 14 non-priority = 20 total
+2026-06-24 22:22:33  INFO      ranking.scorer  Scoring batch 1/4 (5 articles)
+2026-06-24 22:22:46  INFO      ranking.scorer  Scoring batch 2/4 (5 articles)
+2026-06-24 22:22:59  INFO      ranking.scorer  Scoring batch 3/4 (5 articles)
+2026-06-24 22:23:12  INFO      ranking.scorer  Scoring batch 4/4 (5 articles)
+2026-06-24 22:23:15  WARNING   ranking.scorer  Score JSON parse error: Unterminated string starting at: line 11 column 5499 (char 5725) – assigning default scores
+2026-06-24 22:23:15  INFO      ranking.scorer  Top story (rank=50): Sources: Bellingham not confrontational with Ayew | viral=60 relevance=50
+2026-06-24 22:23:15  INFO      pipeline  STEP 4/10 – Filtering  (MIN_VIRAL_SCORE=70, MAX=20)
+2026-06-24 22:23:15  INFO      pipeline  Articles after filter: 0  (dropped 20 below viral floor)
+2026-06-24 22:23:15  WARNING   pipeline  No articles passed the viral score threshold.
+2026-06-24 22:31:10  INFO      poster_builder.html_builder  Using Chrome: C:\Program Files\Google\Chrome\Application\chrome.exe
+2026-06-24 22:31:10  INFO      pipeline  Checking AI connection …
+2026-06-24 22:31:11  INFO      pipeline  =================================================================
+2026-06-24 22:31:11  INFO      pipeline  FIFA 2027 Pipeline  RUN ID: 20260624_163111
+2026-06-24 22:31:11  INFO      pipeline  =================================================================
+2026-06-24 22:31:11  INFO      pipeline  STEP 1a/10 – Scraping inside.fifa.com (priority source, 6 sections)
+2026-06-24 22:31:11  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Rankings               https://inside.fifa.com/en/fifa-rankings
+2026-06-24 22:31:13  INFO      scraping.fifa_scraper    → 15 articles
+2026-06-24 22:31:13  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Inside Home            https://inside.fifa.com/en/
+2026-06-24 22:31:20  INFO      scraping.fifa_scraper    → 13 articles
+2026-06-24 22:31:21  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Women's Football       https://inside.fifa.com/womens-football
+2026-06-24 22:31:37  INFO      scraping.fifa_scraper    → 18 articles
+2026-06-24 22:31:37  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Advancing Football     https://inside.fifa.com/advancing-football
+2026-06-24 22:31:49  INFO      scraping.fifa_scraper    → 13 articles
+2026-06-24 22:31:50  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Transfer System        https://inside.fifa.com/transfer-system
+2026-06-24 22:31:55  INFO      scraping.fifa_scraper    → 14 articles
+2026-06-24 22:31:55  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Talent Development     https://inside.fifa.com/talent-development
+2026-06-24 22:32:02  INFO      scraping.fifa_scraper    → 11 articles
+2026-06-24 22:32:02  INFO      scraping.fifa_scraper  FIFA Inside total: 84 unique articles from 6 sources
+2026-06-24 22:32:02  INFO      pipeline    FIFA Inside: 84 articles
+2026-06-24 22:32:02  INFO      pipeline  STEP 1b/10 – Scraping RSS feeds + Google Trends
+2026-06-24 22:32:02  INFO      pipeline    Fetching trending sports topics from Google …
+2026-06-24 22:32:11  WARNING   scraping.trends_fetcher  Trends seed 'football' failed: The request failed: Google returned a response with code 429
+2026-06-24 22:32:12  INFO      scraping.trends_fetcher    Trending → fifa world cup standings
+2026-06-24 22:32:12  INFO      scraping.trends_fetcher    Trending → fifa world cup 2026 standings
+2026-06-24 22:32:12  INFO      scraping.trends_fetcher    Trending → fifa world cup 2026 portugal
+2026-06-24 22:32:12  INFO      scraping.trends_fetcher    Trending → fifa world cup 2026 ™ standings
+2026-06-24 22:32:12  INFO      scraping.trends_fetcher  Trends: 4 dynamic feeds added
+2026-06-24 22:32:12  INFO      pipeline    Total RSS sources: 10 (3 static + 7 Google)
+2026-06-24 22:32:12  INFO      scraping.rss_fetcher  Fetching  BBC Sport Football    https://feeds.bbci.co.uk/sport/football/rss.xml
+2026-06-24 22:32:13  INFO      scraping.rss_fetcher    → 88 articles
+2026-06-24 22:32:13  INFO      scraping.rss_fetcher  Fetching  Sky Sports Football   https://www.skysports.com/rss/11095
+2026-06-24 22:32:13  INFO      scraping.rss_fetcher    → 20 articles
+2026-06-24 22:32:14  INFO      scraping.rss_fetcher  Fetching  ESPN Soccer           https://www.espn.com/espn/rss/soccer/news
+2026-06-24 22:32:14  INFO      scraping.rss_fetcher    → 30 articles
+2026-06-24 22:32:14  INFO      scraping.rss_fetcher  Fetching  Google News FIFA 2026  https://news.google.com/rss/search?q=FIFA+World+Cup+2026&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:16  INFO      scraping.rss_fetcher    → 110 articles
+2026-06-24 22:32:16  INFO      scraping.rss_fetcher  Fetching  Google News Football  https://news.google.com/rss/search?q=football+goal+match&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:17  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:32:18  INFO      scraping.rss_fetcher  Fetching  Google News Soccer Today  https://news.google.com/rss/search?q=soccer+match+result+today&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:19  INFO      scraping.rss_fetcher    → 58 articles
+2026-06-24 22:32:19  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup standings  https://news.google.com/rss/search?q=fifa+world+cup+standings&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:20  INFO      scraping.rss_fetcher    → 102 articles
+2026-06-24 22:32:21  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup 2026 standings  https://news.google.com/rss/search?q=fifa+world+cup+2026+standings&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:22  INFO      scraping.rss_fetcher    → 102 articles
+2026-06-24 22:32:22  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup 2026 portugal  https://news.google.com/rss/search?q=fifa+world+cup+2026+portugal&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:24  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:32:24  INFO      scraping.rss_fetcher  Fetching  Google Trends: fifa world cup 2026 ™ standings  https://news.google.com/rss/search?q=fifa+world+cup+2026+%E2%84%A2+standings&hl=en&gl=US&ceid=US:en
+2026-06-24 22:32:26  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-24 22:32:26  INFO      scraping.rss_fetcher  Total fetched: 810 articles from 10 sources
+2026-06-24 22:32:26  INFO      pipeline  STEP 1c/10 – HTML scraping fallback
+2026-06-24 22:32:26  INFO      pipeline  Total raw articles: 894  (84 FIFA Inside + 810 RSS + 0 HTML)
+2026-06-24 22:32:26  INFO      pipeline  STEP 2/10 – Deduplication
+2026-06-24 22:32:26  INFO      scraping.deduplicator  Dedup: 894 → 640 articles (254 duplicates removed)
+2026-06-24 22:32:26  INFO      pipeline  24h freshness filter: kept 254, dropped 386 stale
+2026-06-24 22:32:26  INFO      pipeline  STEP 3/10 – AI scoring  (254 articles)
+2026-06-24 22:32:26  INFO      ranking.scorer  Football pre-filter: kept 229 / dropped 25 non-football
+2026-06-24 22:32:26  INFO      ranking.scorer  Scoring cap: 6 priority + 14 non-priority = 20 total
+2026-06-24 22:32:26  INFO      ranking.scorer  Scoring batch 1/4 (5 articles)
+2026-06-24 22:32:39  INFO      ranking.scorer  Scoring batch 2/4 (5 articles)
+2026-06-24 22:32:53  INFO      ranking.scorer  Scoring batch 3/4 (5 articles)
+2026-06-24 22:33:06  INFO      ranking.scorer  Scoring batch 4/4 (5 articles)
+2026-06-24 22:33:07  INFO      ranking.scorer  Top story (rank=90): A record spread of World Cup kick-off times, Brazil’s left-f | viral=95 relevance=90
+2026-06-24 22:33:07  INFO      pipeline  STEP 4/10 – Filtering  (MIN_VIRAL_SCORE=30, MAX=20)
+2026-06-24 22:33:07  INFO      pipeline  Articles after filter: 14  (dropped 6 below viral floor)
+2026-06-24 22:33:07  INFO      pipeline    #1  viral=90  rank=96  cat=transfer      USMNT's Balogun has the World Cup, Europe's bigges...
+2026-06-24 22:33:07  INFO      pipeline    #2  viral=95  rank=90  cat=analytics     A record spread of World Cup kick-off times, Brazil’s l
+2026-06-24 22:33:07  INFO      pipeline    #3  viral=90  rank=90  cat=transfer      Man City latest: 'British record Anderson deal edging c
+2026-06-24 22:33:07  INFO      pipeline    #4  viral=80  rank=78  cat=result        Livano Comenencia’s historic FIFA World Cup goal a prou
+2026-06-24 22:33:07  INFO      pipeline    #5  viral=80  rank=73  cat=announcement  Every team's odds to win the World Cup
+2026-06-24 22:33:07  INFO      pipeline    #6  viral=80  rank=62  cat=ranking       World Cup Power Rankings after two games: Who is N...
+2026-06-24 22:33:07  INFO      pipeline    #7  viral=40  rank=57  cat=announcement  The Best FIFA Football Awards™ 2025
+2026-06-24 22:33:07  INFO      pipeline    #8  viral=50  rank=56  cat=transfer      Hull City latest: 'Tigers interested in Man Utd goalkee
+2026-06-24 22:33:07  INFO      pipeline    #9  viral=50  rank=55  cat=transfer      Tottenham sign goalkeeper Dubravka from Burnley
+2026-06-24 22:33:07  INFO      pipeline    #10  viral=50  rank=55  cat=controversy   Sources: Bellingham not confrontational with Ayew
+2026-06-24 22:33:07  INFO      pipeline    #11  viral=60  rank=54  cat=announcement  Pochettino: USMNT complacency was a 'big punch'
+2026-06-24 22:33:07  INFO      pipeline    #12  viral=30  rank=53  cat=announcement  FIFA Series
+2026-06-24 22:33:07  INFO      pipeline    #13  viral=50  rank=41  cat=injury        Raphinha will give 'everything' to return at WCup
+2026-06-24 22:33:07  INFO      pipeline    #14  viral=40  rank=25  cat=announcement  Mourinho: I'm not anti-Barça, but I love Madrid
+2026-06-24 22:33:07  INFO      pipeline  STEP 5/10 – Stage 1: Content & Image Orchestration  (14 articles)
+2026-06-24 22:33:07  INFO      ai.poster_pipeline  Stage 1  1/14: USMNT's Balogun has the World Cup, Europe's bigges...
+2026-06-24 22:33:10  WARNING   ai.poster_pipeline  Stage 1 failed for 'USMNT's Balogun has the World Cup, Europe's bigges': Stage 1 returned non-JSON. Preview: ```json
+{
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "Source content from reputable news outlet ESPN Soccer, low risk of copyright issues."
+  },
+  "poster_content": {
+    "headline_bangla": "বালোগুনের গোলে ধরা দিচ্ছে ইউরোপ",
+    "subtext_bangla": "বিশ্বকাপে দুই গোল", — using fallbacks
+2026-06-24 22:33:14  INFO      ai.poster_pipeline  Stage 1  2/14: A record spread of World Cup kick-off times, Brazil’s l
+2026-06-24 22:33:16  WARNING   ai.poster_pipeline  Stage 1 failed for 'A record spread of World Cup kick-off times, Brazi': Stage 1 returned non-JSON. Preview: ```json
+{
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "Source content from reputable news websites with no apparent copyright risks."
+  },
+  "poster_content": {
+    "headline_bangla": "ব্রাজিল এবং হালান্ডের রেকর্ড",
+    "subtext_bangla": "বিশ্বকাপে ব্রাজিলের বাঁহাতি স — using fallbacks
+2026-06-24 22:33:20  INFO      ai.poster_pipeline  Stage 1  3/14: Man City latest: 'British record Anderson deal edging c
+2026-06-24 22:33:31  INFO      ai.poster_pipeline  Stage 1 OK  badge=transfer  tone=urgent  emphasis='রেকর্ড'
+2026-06-24 22:33:35  INFO      ai.poster_pipeline  Stage 1  4/14: Livano Comenencia’s historic FIFA World Cup goal a prou
+2026-06-24 22:33:35  WARNING   ai.client  Groq rate limit — sleeping 20.0s then retrying
+2026-06-24 22:34:01  WARNING   ai.client  Groq rate limit — sleeping 20.0s then retrying
+2026-06-25 11:53:47  INFO      poster_builder.html_builder  Using Chrome: C:\Program Files\Google\Chrome\Application\chrome.exe
+2026-06-25 11:55:39  INFO      poster_builder.html_builder  Using Chrome: C:\Program Files\Google\Chrome\Application\chrome.exe
+2026-06-25 11:55:39  INFO      pipeline  Checking AI connection …
+2026-06-25 11:55:46  INFO      pipeline  =================================================================
+2026-06-25 11:55:46  INFO      pipeline  FIFA 2027 Pipeline  RUN ID: 20260625_055546
+2026-06-25 11:55:46  INFO      pipeline  =================================================================
+2026-06-25 11:55:46  INFO      pipeline  STEP 1a/10 – Scraping inside.fifa.com (priority source, 6 sections)
+2026-06-25 11:55:46  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Rankings               https://inside.fifa.com/en/fifa-rankings
+2026-06-25 11:55:47  INFO      scraping.fifa_scraper    → 15 articles
+2026-06-25 11:55:47  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Inside Home            https://inside.fifa.com/en/
+2026-06-25 11:55:51  INFO      scraping.fifa_scraper    → 13 articles
+2026-06-25 11:55:52  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Women's Football       https://inside.fifa.com/womens-football
+2026-06-25 11:55:59  INFO      scraping.fifa_scraper    → 16 articles
+2026-06-25 11:55:59  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Advancing Football     https://inside.fifa.com/advancing-football
+2026-06-25 11:56:07  INFO      scraping.fifa_scraper    → 12 articles
+2026-06-25 11:56:07  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Transfer System        https://inside.fifa.com/transfer-system
+2026-06-25 11:56:14  INFO      scraping.fifa_scraper    → 14 articles
+2026-06-25 11:56:15  INFO      scraping.fifa_scraper  FIFA Inside  FIFA Talent Development     https://inside.fifa.com/talent-development
+2026-06-25 11:56:19  INFO      scraping.fifa_scraper    → 12 articles
+2026-06-25 11:56:20  INFO      scraping.fifa_scraper  FIFA Inside total: 82 unique articles from 6 sources
+2026-06-25 11:56:20  INFO      pipeline    FIFA Inside: 82 articles
+2026-06-25 11:56:20  INFO      pipeline  STEP 1b/10 – Scraping RSS feeds + Google Trends
+2026-06-25 11:56:20  INFO      pipeline    Fetching trending sports topics from Google …
+2026-06-25 11:56:33  WARNING   scraping.trends_fetcher  Trends seed 'FIFA World Cup 2026' failed: The request failed: Google returned a response with code 429
+2026-06-25 11:56:36  WARNING   scraping.trends_fetcher  Trends seed 'football' failed: The request failed: Google returned a response with code 429
+2026-06-25 11:56:37  INFO      scraping.trends_fetcher  Trends: 0 dynamic feeds added
+2026-06-25 11:56:37  INFO      pipeline    Total RSS sources: 6 (3 static + 3 Google)
+2026-06-25 11:56:37  INFO      scraping.rss_fetcher  Fetching  BBC Sport Football    https://feeds.bbci.co.uk/sport/football/rss.xml
+2026-06-25 11:56:38  INFO      scraping.rss_fetcher    → 83 articles
+2026-06-25 11:56:38  INFO      scraping.rss_fetcher  Fetching  Sky Sports Football   https://www.skysports.com/rss/11095
+2026-06-25 11:56:38  INFO      scraping.rss_fetcher    → 20 articles
+2026-06-25 11:56:39  INFO      scraping.rss_fetcher  Fetching  ESPN Soccer           https://www.espn.com/espn/rss/soccer/news
+2026-06-25 11:56:39  INFO      scraping.rss_fetcher    → 23 articles
+2026-06-25 11:56:40  INFO      scraping.rss_fetcher  Fetching  Google News FIFA 2026  https://news.google.com/rss/search?q=FIFA+World+Cup+2026&hl=en&gl=US&ceid=US:en
+2026-06-25 11:56:41  INFO      scraping.rss_fetcher    → 103 articles
+2026-06-25 11:56:41  INFO      scraping.rss_fetcher  Fetching  Google News Football  https://news.google.com/rss/search?q=football+goal+match&hl=en&gl=US&ceid=US:en
+2026-06-25 11:56:43  INFO      scraping.rss_fetcher    → 100 articles
+2026-06-25 11:56:43  INFO      scraping.rss_fetcher  Fetching  Google News Soccer Today  https://news.google.com/rss/search?q=soccer+match+result+today&hl=en&gl=US&ceid=US:en
+2026-06-25 11:56:44  INFO      scraping.rss_fetcher    → 58 articles
+2026-06-25 11:56:44  INFO      scraping.rss_fetcher  Total fetched: 387 articles from 6 sources
+2026-06-25 11:56:44  INFO      pipeline  STEP 1c/10 – HTML scraping fallback
+2026-06-25 11:56:44  INFO      pipeline  Total raw articles: 469  (82 FIFA Inside + 387 RSS + 0 HTML)
+2026-06-25 11:56:44  INFO      pipeline  STEP 2/10 – Deduplication
+2026-06-25 11:56:45  INFO      scraping.deduplicator  Dedup: 469 → 429 articles (40 duplicates removed)
+2026-06-25 11:56:45  INFO      pipeline  24h freshness filter: kept 155, dropped 274 stale
+2026-06-25 11:56:45  INFO      pipeline  STEP 3/10 – AI scoring  (155 articles)
+2026-06-25 11:56:45  INFO      ranking.scorer  Football pre-filter: kept 130 / dropped 25 non-football
+2026-06-25 11:56:45  INFO      ranking.scorer  Scoring cap: 5 priority + 15 non-priority = 20 total
+2026-06-25 11:56:45  INFO      ranking.scorer  Scoring batch 1/4 (5 articles)
+2026-06-25 11:56:58  INFO      ranking.scorer  Scoring batch 2/4 (5 articles)
+2026-06-25 11:57:11  INFO      ranking.scorer  Scoring batch 3/4 (5 articles)
+2026-06-25 11:57:25  INFO      ranking.scorer  Scoring batch 4/4 (5 articles)
+2026-06-25 11:57:26  INFO      ranking.scorer  Top story (rank=74): S. Korea could exit WC after 'wrong' Son gamble | viral=90 relevance=0
+2026-06-25 11:57:26  INFO      pipeline  STEP 4/10 – Filtering  (MIN_VIRAL_SCORE=30, MAX=20)
+2026-06-25 11:57:26  INFO      pipeline  Articles after filter: 13  (dropped 7 below viral floor)
+2026-06-25 11:57:26  INFO      pipeline    #1  viral=90  rank=79  cat=result        S. Korea could exit WC after 'wrong' Son gamble
+2026-06-25 11:57:26  INFO      pipeline    #2  viral=80  rank=73  cat=result        South Africa vs South Korea, Fifa World Cup standings: 
+2026-06-25 11:57:26  INFO      pipeline    #3  viral=70  rank=60  cat=injury        Sources: Bellingham not confrontational with Ayew
+2026-06-25 11:57:26  INFO      pipeline    #4  viral=70  rank=55  cat=result        Mexico beat Czech Republic to maintain 100% winning rec
+2026-06-25 11:57:26  INFO      pipeline    #5  viral=80  rank=54  cat=analytics     FIFA World Cup 2026 stats: Vinicius Jr. joins Ronaldo w
+2026-06-25 11:57:26  INFO      pipeline    #6  viral=60  rank=51  cat=announcement  Morocco see 'ingredients' to become WC winners
+2026-06-25 11:57:26  INFO      pipeline    #7  viral=60  rank=51  cat=announcement  How does Ronaldo turning up change things? Re-ranking t
+2026-06-25 11:57:26  INFO      pipeline    #8  viral=60  rank=48  cat=result        'Mixed emotions' as Canada qualify but lose home advant
+2026-06-25 11:57:26  INFO      pipeline    #9  viral=50  rank=45  cat=injury        Pochettino won't 'risk' USMNT players on yellows
+2026-06-25 11:57:26  INFO      pipeline    #10  viral=40  rank=40  cat=transfer      Sources: Milan rejects NYCFC approach for Pulisic
+2026-06-25 11:57:26  INFO      pipeline    #11  viral=40  rank=39  cat=result        Ochoa cameo seals perfect Mexico group stage
+2026-06-25 11:57:26  INFO      pipeline    #12  viral=30  rank=35  cat=result        Canada in WC knockouts, miss chance to top group
+2026-06-25 11:57:26  INFO      pipeline    #13  viral=30  rank=25  cat=ranking       World Cup Power Rankings after two games: Who is N...
+2026-06-25 11:57:26  INFO      pipeline  STEP 5/10 – Stage 1: Content & Image Orchestration  (13 articles)
+2026-06-25 11:57:26  INFO      ai.poster_pipeline  Stage 1  1/13: S. Korea could exit WC after 'wrong' Son gamble
+2026-06-25 11:57:29  INFO      ai.poster_pipeline  Stage 1 OK  badge=result  tone=dramatic  emphasis='সন'
+2026-06-25 11:57:33  INFO      ai.poster_pipeline  Stage 1  2/13: South Africa vs South Korea, Fifa World Cup standings: 
+2026-06-25 11:57:35  INFO      ai.poster_pipeline  Stage 1 OK  badge=result  tone=celebratory  emphasis='জিতেছে'
+2026-06-25 11:57:39  INFO      ai.poster_pipeline  Stage 1  3/13: Sources: Bellingham not confrontational with Ayew
+2026-06-25 11:57:50  WARNING   ai.poster_pipeline  Stage 1 failed for 'Sources: Bellingham not confrontational with Ayew': Stage 1 returned non-JSON. Preview: ```json
+{
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "Source content from ESPN Soccer, low risk of copyright issues."
+  },
+  "poster_content": {
+    "headline_bangla": "বেলিংহাম রেড কার্ড এড়িয়ে গেছে",
+    "subtext_bangla": "ইংল্যান্ড গানার সাথে গোলবিহীন ড্র",
+    " — using fallbacks
+2026-06-25 11:57:54  INFO      ai.poster_pipeline  Stage 1  4/13: Mexico beat Czech Republic to maintain 100% winning rec
+2026-06-25 11:57:57  INFO      ai.poster_pipeline  Stage 1 OK  badge=result  tone=celebratory  emphasis='মেক্সিকোর'
+2026-06-25 11:58:01  INFO      ai.poster_pipeline  Stage 1  5/13: FIFA World Cup 2026 stats: Vinicius Jr. joins Ronaldo w
+2026-06-25 11:58:07  INFO      ai.poster_pipeline  Stage 1 OK  badge=breaking  tone=celebratory  emphasis='ভিনিসিয়াস জুনিয়র'
+2026-06-25 11:58:11  INFO      ai.poster_pipeline  Stage 1  6/13: Morocco see 'ingredients' to become WC winners
+2026-06-25 11:58:14  WARNING   ai.poster_pipeline  Stage 1 failed for 'Morocco see 'ingredients' to become WC winners': Stage 1 returned non-JSON. Preview: {
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "Low risk as the content is from a reputable source and does not contain sensitive information."
+  },
+  "poster_content": {
+    "headline_bangla": "মরোক্কো বিশ্বকাপ জিততে পারে",
+    "subtext_bangla": "আফ্রিকার প্রথম বিশ্বক — using fallbacks
+2026-06-25 11:58:18  INFO      ai.poster_pipeline  Stage 1  7/13: How does Ronaldo turning up change things? Re-ranking t
+2026-06-25 11:58:22  INFO      ai.poster_pipeline  Stage 1 OK  badge=announcement  tone=informational  emphasis='রোনালডো'
+2026-06-25 11:58:26  INFO      ai.poster_pipeline  Stage 1  8/13: 'Mixed emotions' as Canada qualify but lose home advant
+2026-06-25 11:58:29  WARNING   ai.poster_pipeline  Stage 1 failed for ''Mixed emotions' as Canada qualify but lose home a': Stage 1 returned non-JSON. Preview: {
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "The source content from BBC Sport Football poses minimal risk."
+  },
+  "poster_content": {
+    "headline_bangla": "কানাডা হারিয়েছে হোম অ্যাডভান্টেজ",
+    "subtext_bangla": "সুইজারল্যান্ডের বিরুদ্ধে হেরে",
+    "badge_type" — using fallbacks
+2026-06-25 11:58:33  INFO      ai.poster_pipeline  Stage 1  9/13: Pochettino won't 'risk' USMNT players on yellows
+2026-06-25 11:58:37  WARNING   ai.poster_pipeline  Stage 1 failed for 'Pochettino won't 'risk' USMNT players on yellows': Stage 1 returned non-JSON. Preview: {
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "Source content from reputable news outlet ESPN Soccer with no apparent copyright issues."
+  },
+  "poster_content": {
+    "headline_bangla": "পোচেত্তিনোর সিদ্ধান্ত",
+    "subtext_bangla": "হলো ইয়েলো কার্ড",
+    "badge_typ — using fallbacks
+2026-06-25 11:58:41  INFO      ai.poster_pipeline  Stage 1  10/13: Sources: Milan rejects NYCFC approach for Pulisic
+2026-06-25 11:58:47  INFO      ai.poster_pipeline  Stage 1 OK  badge=transfer  tone=informational  emphasis='পুলিসিক'
+2026-06-25 11:58:51  INFO      ai.poster_pipeline  Stage 1  11/13: Ochoa cameo seals perfect Mexico group stage
+2026-06-25 11:58:54  WARNING   ai.poster_pipeline  Stage 1 failed for 'Ochoa cameo seals perfect Mexico group stage': Stage 1 returned non-JSON. Preview: ```json
+{
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "ESPN Soccer source content poses low copyright risk."
+  },
+  "poster_content": {
+    "headline_bangla": "ওচোয়ার অভিনয়",
+    "subtext_bangla": "মেক্সিকো ৩-০ গোলে জিতেছে",
+    "badge_type": "result",
+    "emotiona — using fallbacks
+2026-06-25 11:58:58  INFO      ai.poster_pipeline  Stage 1  12/13: Canada in WC knockouts, miss chance to top group
+2026-06-25 11:59:01  WARNING   ai.poster_pipeline  Stage 1 failed for 'Canada in WC knockouts, miss chance to top group': Stage 1 returned non-JSON. Preview: ```json
+{
+  "copyright_audit": {
+    "status": "APPROVED_SAFE_GEN",
+    "risk_notes": "Source content from reputable news outlet ESPN Soccer, no copyright risks identified."
+  },
+  "poster_content": {
+    "headline_bangla": "কানাডা বাদ পড়েছে গ্রুপের শীর্ষ স্থান",
+    "subtext_bangla": "সুইজারল্যান্ — using fallbacks
+2026-06-25 11:59:05  INFO      ai.poster_pipeline  Stage 1  13/13: World Cup Power Rankings after two games: Who is N...
+2026-06-25 11:59:08  INFO      ai.poster_pipeline  Stage 1 OK  badge=ranking  tone=informational  emphasis='বিশ্বকাপ'
+2026-06-25 11:59:08  INFO      pipeline  STEP 6/10 – Image prompts embedded in Stage 1 output (skipping legacy step)
+2026-06-25 11:59:08  INFO      pipeline  STEP 7/10 – Image generation
+2026-06-25 11:59:08  INFO      pipeline    Image 1/13: S. Korea could exit WC after 'wrong' Son gamble
+2026-06-25 11:59:08  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:09  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367149_square.png
+2026-06-25 11:59:09  INFO      pipeline    Image 2/13: South Africa vs South Korea, Fifa World Cup standi
+2026-06-25 11:59:09  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:09  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367149_square.png
+2026-06-25 11:59:09  INFO      pipeline    Image 3/13: Sources: Bellingham not confrontational with Ayew
+2026-06-25 11:59:09  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:10  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367150_square.png
+2026-06-25 11:59:10  INFO      pipeline    Image 4/13: Mexico beat Czech Republic to maintain 100% winnin
+2026-06-25 11:59:10  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:10  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367150_square.png
+2026-06-25 11:59:10  INFO      pipeline    Image 5/13: FIFA World Cup 2026 stats: Vinicius Jr. joins Rona
+2026-06-25 11:59:10  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:10  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367150_square.png
+2026-06-25 11:59:10  INFO      pipeline    Image 6/13: Morocco see 'ingredients' to become WC winners
+2026-06-25 11:59:10  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:10  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367150_square.png
+2026-06-25 11:59:10  INFO      pipeline    Image 7/13: How does Ronaldo turning up change things? Re-rank
+2026-06-25 11:59:10  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:11  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367151_square.png
+2026-06-25 11:59:11  INFO      pipeline    Image 8/13: 'Mixed emotions' as Canada qualify but lose home a
+2026-06-25 11:59:11  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:11  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367151_square.png
+2026-06-25 11:59:11  INFO      pipeline    Image 9/13: Pochettino won't 'risk' USMNT players on yellows
+2026-06-25 11:59:11  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:11  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367151_square.png
+2026-06-25 11:59:11  INFO      pipeline    Image 10/13: Sources: Milan rejects NYCFC approach for Pulisic
+2026-06-25 11:59:11  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:12  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367152_square.png
+2026-06-25 11:59:12  INFO      pipeline    Image 11/13: Ochoa cameo seals perfect Mexico group stage
+2026-06-25 11:59:12  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:12  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367152_square.png
+2026-06-25 11:59:12  INFO      pipeline    Image 12/13: Canada in WC knockouts, miss chance to top group
+2026-06-25 11:59:12  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:12  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367152_square.png
+2026-06-25 11:59:12  INFO      pipeline    Image 13/13: World Cup Power Rankings after two games: Who is N
+2026-06-25 11:59:12  INFO      image_generation.generator  Generating image  backend=mock  size=square  1080x1080
+2026-06-25 11:59:12  INFO      image_generation.generator  Image saved → C:\Users\adib\Desktop\MediaPosterAgent\posters\image_1782367152_square.png
+2026-06-25 11:59:12  INFO      pipeline  STEP 7.5/10 – Stage 2: Typography Orchestration  (13 articles)
+2026-06-25 11:59:12  INFO      ai.poster_pipeline  Stage 2  1/13: S. Korea could exit WC after 'wrong' Son gamble
+2026-06-25 11:59:13  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=66  emphasis_color=#f42a41
+2026-06-25 11:59:15  INFO      ai.poster_pipeline  Stage 2  2/13: South Africa vs South Korea, Fifa World Cup standings: 
+2026-06-25 11:59:16  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=82  emphasis_color=#f5c842
+2026-06-25 11:59:18  INFO      ai.poster_pipeline  Stage 2  3/13: Sources: Bellingham not confrontational with Ayew
+2026-06-25 11:59:19  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=68  emphasis_color=#f42a41
+2026-06-25 11:59:21  INFO      ai.poster_pipeline  Stage 2  4/13: Mexico beat Czech Republic to maintain 100% winning rec
+2026-06-25 11:59:23  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=90  emphasis_color=#f5c842
+2026-06-25 11:59:25  INFO      ai.poster_pipeline  Stage 2  5/13: FIFA World Cup 2026 stats: Vinicius Jr. joins Ronaldo w
+2026-06-25 11:59:26  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=90  emphasis_color=#f5c842
+2026-06-25 11:59:28  INFO      ai.poster_pipeline  Stage 2  6/13: Morocco see 'ingredients' to become WC winners
+2026-06-25 11:59:29  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=64  emphasis_color=#f42a41
+2026-06-25 11:59:31  INFO      ai.poster_pipeline  Stage 2  7/13: How does Ronaldo turning up change things? Re-ranking t
+2026-06-25 11:59:32  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=88  emphasis_color=#7dd3b8
+2026-06-25 11:59:34  INFO      ai.poster_pipeline  Stage 2  8/13: 'Mixed emotions' as Canada qualify but lose home advant
+2026-06-25 11:59:37  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=50  emphasis_color=#f42a41
+2026-06-25 11:59:39  INFO      ai.poster_pipeline  Stage 2  9/13: Pochettino won't 'risk' USMNT players on yellows
+2026-06-25 11:59:46  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=72  emphasis_color=#f42a41
+2026-06-25 11:59:48  INFO      ai.poster_pipeline  Stage 2  10/13: Sources: Milan rejects NYCFC approach for Pulisic
+2026-06-25 11:59:57  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=90  emphasis_color=#f5c842
+2026-06-25 11:59:59  INFO      ai.poster_pipeline  Stage 2  11/13: Ochoa cameo seals perfect Mexico group stage
+2026-06-25 12:00:06  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=72  emphasis_color=#f42a41
+2026-06-25 12:00:08  INFO      ai.poster_pipeline  Stage 2  12/13: Canada in WC knockouts, miss chance to top group
+2026-06-25 12:00:15  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=48  emphasis_color=#f42a41
+2026-06-25 12:00:17  INFO      ai.poster_pipeline  Stage 2  13/13: World Cup Power Rankings after two games: Who is N...
+2026-06-25 12:00:25  INFO      ai.poster_pipeline  Stage 2 OK  headline_px=90  emphasis_color=#7dd3b8
+2026-06-25 12:00:25  INFO      pipeline  STEP 8/10 – Poster composition
+2026-06-25 12:00:25  INFO      pipeline    Poster 1/13: S. Korea could exit WC after 'wrong' Son gamble
+2026-06-25 12:00:31  INFO      pipeline    Poster 2/13: South Africa vs South Korea, Fifa World Cup standi
+2026-06-25 12:00:37  INFO      pipeline    Poster 3/13: Sources: Bellingham not confrontational with Ayew
+2026-06-25 12:00:43  INFO      pipeline    Poster 4/13: Mexico beat Czech Republic to maintain 100% winnin
+2026-06-25 12:00:49  INFO      pipeline    Poster 5/13: FIFA World Cup 2026 stats: Vinicius Jr. joins Rona
+2026-06-25 12:00:55  INFO      pipeline    Poster 6/13: Morocco see 'ingredients' to become WC winners
+2026-06-25 12:01:00  INFO      pipeline    Poster 7/13: How does Ronaldo turning up change things? Re-rank
+2026-06-25 12:01:06  INFO      pipeline    Poster 8/13: 'Mixed emotions' as Canada qualify but lose home a
+2026-06-25 12:01:11  INFO      pipeline    Poster 9/13: Pochettino won't 'risk' USMNT players on yellows
+2026-06-25 12:01:17  INFO      pipeline    Poster 10/13: Sources: Milan rejects NYCFC approach for Pulisic
+2026-06-25 12:01:22  INFO      pipeline    Poster 11/13: Ochoa cameo seals perfect Mexico group stage
+2026-06-25 12:01:28  INFO      pipeline    Poster 12/13: Canada in WC knockouts, miss chance to top group
+2026-06-25 12:01:34  INFO      pipeline    Poster 13/13: World Cup Power Rankings after two games: Who is N
+2026-06-25 12:01:39  INFO      pipeline  STEP 9/10 – Caching processed URLs
+2026-06-25 12:01:39  INFO      pipeline  STEP 10/10 – Exporting outputs
+2026-06-25 12:01:39  INFO      exports.exporter  exported json       C:\Users\adib\Desktop\MediaPosterAgent\exports\articles_20260625_120139.json
+2026-06-25 12:01:39  INFO      exports.exporter  exported csv        C:\Users\adib\Desktop\MediaPosterAgent\exports\articles_20260625_120139.csv
+2026-06-25 12:01:39  INFO      exports.exporter  exported manifest   C:\Users\adib\Desktop\MediaPosterAgent\exports\manifest_20260625_120139.json
+2026-06-25 12:01:39  INFO      exports.exporter  exported report     C:\Users\adib\Desktop\MediaPosterAgent\exports\report_20260625_120139.html
+2026-06-25 12:01:39  INFO      pipeline  =================================================================
+2026-06-25 12:01:39  INFO      pipeline  Pipeline COMPLETE  articles=13  elapsed=352.6s
+2026-06-25 12:01:39  INFO      pipeline  Top story: S. Korea could exit WC after 'wrong' Son gamble (viral=90)
+2026-06-25 12:01:39  INFO      pipeline  Exports:
+2026-06-25 12:01:39  INFO      pipeline    json        C:\Users\adib\Desktop\MediaPosterAgent\exports\articles_20260625_120139.json
+2026-06-25 12:01:39  INFO      pipeline    csv         C:\Users\adib\Desktop\MediaPosterAgent\exports\articles_20260625_120139.csv
+2026-06-25 12:01:39  INFO      pipeline    manifest    C:\Users\adib\Desktop\MediaPosterAgent\exports\manifest_20260625_120139.json
+2026-06-25 12:01:39  INFO      pipeline    report      C:\Users\adib\Desktop\MediaPosterAgent\exports\report_20260625_120139.html
+2026-06-25 12:01:39  INFO      pipeline  =================================================================
